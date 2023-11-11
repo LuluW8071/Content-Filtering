@@ -1,1 +1,5 @@
 env/
+movies_dict.pkl
+movies.pkl
+movies_dataset.pkl
+movies_dataset.csv
