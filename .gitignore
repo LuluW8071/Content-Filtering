@@ -2,5 +2,6 @@ env/
 movies_dict.pkl
 movies.pkl
 movies_dataset.pkl
+similarity.pkl
 movies_dataset.csv
 __pycache__/
