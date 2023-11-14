@@ -27,9 +27,8 @@
                 {% for i in range(movies|length) %}
                 <div class="col-lg-3 col-3 mb-4 shuffle-item" data-groups="[&quot;branding&quot;]">
                     <div class="position-relative inner-box">
-
                         <div class="image position-relative ">
-                            <img src="{{posters[i]}}"
+                            <img src="{{ posters[i] }}"
                                 alt="{{ title[i] }}" class="img-fluid w-100 d-block book-image">
                             <div class="overlay-box">
                                 <div class="overlay-inner">
