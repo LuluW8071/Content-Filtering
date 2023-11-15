@@ -9,13 +9,10 @@ import numpy as np
 from algoliasearch.search_client import SearchClient
 from api import fetch_poster, ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
 
-# Algolia Search
-client = SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
-index = client.init_index(ALGOLIA_INDEX_NAME)
-
-
 # ------Load dataset files--------
+movies_df = pickle.load(open('model/movies.pkl', 'rb'))
 popular_df = pickle.load(open('model/movies_dataset.pkl', 'rb'))
+similarity = pickle.load(open('model/similarity.pkl', 'rb'))
 
 app = Flask(__name__)
 
@@ -73,6 +70,10 @@ def index():
                            posters=posters,
                            num_pages=num_pages, current_page=page, prev=prev, next=next)
 
+# Algolia Search
+client = SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+index = client.init_index(ALGOLIA_INDEX_NAME)
+
 # Search function
 @app.route('/search')
 def search():
@@ -106,10 +107,51 @@ def search():
                                posters=posters)
 
 
+@app.route('/movie', methods=['GET'])
+def movie():
+    movie_id = request.args.get('id')
+    movie_title = request.args.get('title')
+    overview = request.args.get('overview')
+    genres = request.args.get('genres')
+    popularity = request.args.get('popularity')
+    cast = request.args.get('cast')
+    crew = request.args.get('crew')
+    production = request.args.get('production_comapnaies')
+    runtime = request.args.get('runtime')
+    release_year = request.args.get('release_year')
+
+    # Testing
+    # Recommendation through movies_df and similarity
+    # movie_index = next((i for i, title in enumerate(movies_df['title']) if title == movie_title), None)
+    # distance = similarity[movie_index]
+    # movies_list = sorted(list(enumerate(distance)),
+    #                      reverse=True, key=lambda x: x[1])[1:5]
+
+    # recommended_movies = [{'title': movies_df.iloc[i[0]]['title'],
+    #                        'id': movies_df.iloc[i[0]]['id']} for i in movies_list]
+
+    # for i in movies_list:
+    #     print(new_df.iloc[i[0]].title)
+
+    # print(recommended_movies)
+
+    return render_template('movie.html', movie_id=movie_id,
+                           movie_title=movie_title,
+                           overview=overview,
+                           genres=genres,
+                           popularity=popularity,
+                           cast=cast,
+                           crew=crew,
+                           production=production,
+                           runtime=runtime,
+                           release_year=release_year,
+                           recommended_movies=recommended_movies)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
-# Test 
+# Test
 # movies = pickle.load(open('model/movie_list.pkl','rb'))
 # similarity = pickle.load(open('model/similarity.pkl','rb'))
 
