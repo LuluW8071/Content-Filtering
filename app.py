@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for
+from urllib.parse import unquote 
 import pickle
 from math import ceil
 import re
@@ -33,13 +34,8 @@ def index():
                               'title',
                               'overview',
                               'genres',
-                              'keywords',
                               'popularity',
-                              'cast',
-                              'crew',
-                              'production_companies',
-                              'runtime',
-                              'release_year']]
+                              'crew',]]
 
     movies_data = movies_data.sort_values(by='popularity', ascending=False)
 
@@ -109,34 +105,25 @@ def search():
 
 @app.route('/movie', methods=['GET'])
 def movie():
-    movie_id = request.args.get('id')
-    movie_title = request.args.get('title')
+    id = request.args.get('id')
+    title = unquote(request.args.get('title'))
     overview = request.args.get('overview')
-    genres = request.args.get('genres')
+    genres = unquote(request.args.get('genres'))
     popularity = request.args.get('popularity')
     cast = request.args.get('cast')
-    crew = request.args.get('crew')
+    crew = unquote(request.args.get('crew'))
     production = request.args.get('production_comapnaies')
     runtime = request.args.get('runtime')
     release_year = request.args.get('release_year')
 
-    # Testing
-    # Recommendation through movies_df and similarity
-    # movie_index = next((i for i, title in enumerate(movies_df['title']) if title == movie_title), None)
-    # distance = similarity[movie_index]
-    # movies_list = sorted(list(enumerate(distance)),
-    #                      reverse=True, key=lambda x: x[1])[1:5]
+    # Fetch poster URLs for the movie IDs
+    # print(f"Fetching poster for movie with ID: {id}")
+    # movie_ids = id
+    posters = fetch_poster([id])
+    # print (posters)
 
-    # recommended_movies = [{'title': movies_df.iloc[i[0]]['title'],
-    #                        'id': movies_df.iloc[i[0]]['id']} for i in movies_list]
-
-    # for i in movies_list:
-    #     print(new_df.iloc[i[0]].title)
-
-    # print(recommended_movies)
-
-    return render_template('movie.html', movie_id=movie_id,
-                           movie_title=movie_title,
+    return render_template('movie.html', id=id,
+                           title=title,
                            overview=overview,
                            genres=genres,
                            popularity=popularity,
@@ -145,7 +132,9 @@ def movie():
                            production=production,
                            runtime=runtime,
                            release_year=release_year,
-                           recommended_movies=recommended_movies)
+                           posters= posters
+                        #    recommended_movies=recommended_movies
+                        )
 
 
 if __name__ == '__main__':
@@ -160,3 +149,20 @@ if __name__ == '__main__':
 #     "Type or select a movie from the dropdown",
 #     movie_list
 # )
+
+
+
+ # Testing
+ # Recommendation through movies_df and similarity
+ # movie_index = next((i for i, title in enumerate(movies_df['title']) if title == movie_title), None)
+ # distance = similarity[movie_index]
+ # movies_list = sorted(list(enumerate(distance)),
+ #                      reverse=True, key=lambda x: x[1])[1:5]
+
+ # recommended_movies = [{'title': movies_df.iloc[i[0]]['title'],
+ #                        'id': movies_df.iloc[i[0]]['id']} for i in movies_list]
+
+ # for i in movies_list:
+ #     print(new_df.iloc[i[0]].title)
+
+ # print(recommended_movies)
