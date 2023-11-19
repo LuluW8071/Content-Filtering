@@ -47,13 +47,14 @@ def fetch_trailers(movie_ids):
         url = f"https://api.themoviedb.org/3/movie/{movie_id}/videos?language=en-US&api_key={TMDB_API_KEY}"
         data = requests.get(url)
         data = data.json()
-        # print(data)
+        print(data)
         if 'results' in data:
             for video in data['results']:
-                if video.get('name') == "Official Trailer":
+                # if 'name' contains string 'trailer' then pass key to link
+                if "Trailer" in video.get('name', ''):
                     key = video.get('key')
-                    full_path = f"https://www.youtube.com/watch?v={key}"
-                    trailers.append(full_path)
+                    link = f"https://www.youtube.com/embed/{key}"
+                    trailers.append(link)
         else:
             trailers.append(None)
     return trailers

@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 from algoliasearch.search_client import SearchClient
-from api import fetch_poster, fetch_overview
+from api import fetch_poster, fetch_overview, fetch_trailers
 from api import ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
 
 # ------Load dataset files--------
@@ -124,13 +124,14 @@ def movie():
     runtime = request.args.get('runtime')
     release_year = request.args.get('release_year')
 
-    # Fetch poster URLs for the movie IDs
+    # Fetch poster URLs, overview, trailer for the movie IDs
     # print(f"Fetching poster for movie with ID: {id}")
     posters = fetch_poster([id])
     # print (posters)
-
-    # Fetch overview for the movie ID
     overview = fetch_overview([id])
+    trailer_link = fetch_trailers([id])
+    print(trailer_link)
+
     return render_template('movie.html', id=id,
                            title=title,
                            overview=overview[0] if overview else None,
@@ -141,7 +142,8 @@ def movie():
                            production=production,
                            runtime=runtime,
                            release_year=release_year,
-                           posters=posters
+                           posters=posters,
+                           trailer_link=trailer_link,
                            #    recommended_movies=recommended_movies
                            )
 
