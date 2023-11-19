@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for
-from urllib.parse import unquote 
+from urllib.parse import unquote
 import pickle
 from math import ceil
 import re
@@ -8,7 +8,8 @@ import pandas as pd
 import numpy as np
 
 from algoliasearch.search_client import SearchClient
-from api import fetch_poster, ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
+from api import fetch_poster, fetch_overview
+from api import ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
 
 # ------Load dataset files--------
 movies_df = pickle.load(open('model/movies.pkl', 'rb'))
@@ -26,6 +27,8 @@ app.config['UPLOAD_FOLDER'] = 'static'
 
 # --------Templates----------
 # Setting up home page
+
+
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
@@ -35,7 +38,9 @@ def index():
                               'overview',
                               'genres',
                               'popularity',
-                              'crew',]]
+                              'crew',
+                              'release_year',
+                              'runtime']]
 
     movies_data = movies_data.sort_values(by='popularity', ascending=False)
 
@@ -50,10 +55,12 @@ def index():
 
     paginated_movies = movies_data.iloc[start_index:end_index]
 
+    movie_ids = list(paginated_movies['id'].values)
     title = list(paginated_movies['title'].values)
     crew = list(paginated_movies['crew'].values)
     popularity = list(paginated_movies['popularity'].round(2))
-    movie_ids = list(paginated_movies['id'].values)
+    release_year = list(paginated_movies['release_year'].values)
+    runtime = list(paginated_movies['runtime'].values)
 
     posters = fetch_poster(movie_ids)
 
@@ -61,16 +68,18 @@ def index():
     next = '/?page=' + str(page + 1) if page < num_pages else None
 
     return render_template('home.html', movies=paginated_movies.to_dict(orient='records'),
-                           title=title,
-                           crew=crew, popularity=popularity,
+                           title=title, crew=crew, popularity=popularity, release_year=release_year, runtime=runtime,
                            posters=posters,
                            num_pages=num_pages, current_page=page, prev=prev, next=next)
+
 
 # Algolia Search
 client = SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 index = client.init_index(ALGOLIA_INDEX_NAME)
 
 # Search function
+
+
 @app.route('/search')
 def search():
     query = request.args.get('query')
@@ -107,7 +116,6 @@ def search():
 def movie():
     id = request.args.get('id')
     title = unquote(request.args.get('title'))
-    overview = request.args.get('overview')
     genres = unquote(request.args.get('genres'))
     popularity = request.args.get('popularity')
     cast = request.args.get('cast')
@@ -118,13 +126,14 @@ def movie():
 
     # Fetch poster URLs for the movie IDs
     # print(f"Fetching poster for movie with ID: {id}")
-    # movie_ids = id
     posters = fetch_poster([id])
     # print (posters)
 
+    # Fetch overview for the movie ID
+    overview = fetch_overview([id])
     return render_template('movie.html', id=id,
                            title=title,
-                           overview=overview,
+                           overview=overview[0] if overview else None,
                            genres=genres,
                            popularity=popularity,
                            cast=cast,
@@ -132,9 +141,9 @@ def movie():
                            production=production,
                            runtime=runtime,
                            release_year=release_year,
-                           posters= posters
-                        #    recommended_movies=recommended_movies
-                        )
+                           posters=posters
+                           #    recommended_movies=recommended_movies
+                           )
 
 
 if __name__ == '__main__':
@@ -149,8 +158,6 @@ if __name__ == '__main__':
 #     "Type or select a movie from the dropdown",
 #     movie_list
 # )
-
-
 
  # Testing
  # Recommendation through movies_df and similarity
