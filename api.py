@@ -43,11 +43,12 @@ def fetch_overview(movie_ids):
 
 def fetch_trailers(movie_ids):
     trailers = []
-    for movie_id in movie_ids:
+    for movie_id in movie_ids#
         url = f"https://api.themoviedb.org/3/movie/{movie_id}/videos?language=en-US&api_key={TMDB_API_KEY}"
         data = requests.get(url)
         data = data.json()
-        print(data)
+        # print(data)
+
         if 'results' in data:
             for video in data['results']:
                 # if 'name' contains string 'trailer' then pass key to link

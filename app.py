@@ -130,7 +130,7 @@ def movie():
     # print (posters)
     overview = fetch_overview([id])
     trailer_link = fetch_trailers([id])
-    print(trailer_link)
+    # print(trailer_link)
 
     return render_template('movie.html', id=id,
                            title=title,
@@ -144,7 +144,7 @@ def movie():
                            release_year=release_year,
                            posters=posters,
                            trailer_link=trailer_link,
-                           #    recommended_movies=recommended_movies
+                           # recommended_movies=recommended_movies
                            )
 
 
