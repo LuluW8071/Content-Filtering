@@ -23,8 +23,8 @@
     <section class="portfolio scroll-down-animation">
         <div class="container my-5">
             <div class="row">
-                <div class="col-md-4 pl-md-0 pr-md-0 selected-book">
-                    <img src="{{ posters[0] }}" alt="{{ title }}" class="img-fluid w-100 d-block movie-poster">
+                <div class="col-md-4 pl-md-0 pr-md-0 mt-2 selected-book">
+                    <img src="{{ posters[0] }}" alt="{{ title }} cover" class="img-fluid w-100 d-block">
 
                 </div>
                 <div class="col-md-8">
@@ -33,9 +33,11 @@
                     <br>
                     <div class="details ml-5">
                         <p><b>Movie id:</b> {{ id }}</p>
-                        <p><b></b> {{ overview}}</p>
                         <p><b>Genres:</b> {{ genres }}</p>
                         <p><b>Director:</b> {{ crew }}</p>
+                        <p><b>Runtime:</b> {{ runtime|int }} min</p>
+                        <p><b>Release Year:</b> {{ release_year }}</p>
+                        <p><b></b> {{ overview }}</p>
                     </div>
                 </div>
             </div>

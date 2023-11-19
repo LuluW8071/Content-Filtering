@@ -39,7 +39,7 @@
                 class="img-fluid w-100 d-block book-image">
               <div class="overlay-box">
                 <div class="overlay-inner">
-                  <a class="overlay-content" href="#">
+                <a class="overlay-content" href="{{ url_for('movie') }}?id={{ hit['id'] | urlencode }}&title={{ hit['title'] | urlencode }}&genres={{ hit['genres'] | urlencode }}&crew={{ hit['crew'] | urlencode }}&release_year={{ hit['release_year'] | urlencode }}&release_year={{ hit['runtime'] | urlencode }} ">
                     <h5 class="mb-0">{{ hit['title'] }}</h5>
                     <p><i>{{ hit['crew'] }}</i></p>
                   </a>

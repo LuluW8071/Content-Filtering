@@ -31,7 +31,7 @@
                             <img src="{{ posters[loop.index0] }}" alt="{{ movie.title }}" class="img-fluid w-100 d-block book-image">
                             <div class="overlay-box">
                                 <div class="overlay-inner">
-                                    <a class="overlay-content" href="{{ url_for('movie', id=movie.id|urlencode, title=movie.title|urlencode, genres=movie.genres|urlencode, crew=movie.crew|urlencode) }}">
+                                    <a class="overlay-content" href="{{ url_for('movie', id=movie.id|urlencode, title=movie.title|urlencode, genres=movie.genres|urlencode, crew=movie.crew|urlencode, release_year=movie.release_year|urlencode,runtime=movie.runtime|urlencode) }}">
                                         <h5 class ="mb-0">{{ movie.title }}</h5>
                                     </a>
                                 </div>
