@@ -25,7 +25,6 @@
             <div class="row">
                 <div class="col-md-4 pl-md-0 pr-md-0 mt-2 selected-book">
                     <img src="{{ posters[0] }}" alt="{{ title }} cover" class="img-fluid w-100 d-block">
-
                 </div>
                 <div class="col-md-8">
                     <h1 class="text-center my-3">{{ title }}</h1>
@@ -37,13 +36,22 @@
                         <p><b>Director:</b> {{ crew }}</p>
                         <p><b>Runtime:</b> {{ runtime|int }} min</p>
                         <p><b>Release Year:</b> {{ release_year }}</p>
-                        <p><b></b> {{ overview }}</p>
                     </div>
                 </div>
+                <div class="details mt-5">
+                    <i> {{ overview }}</i>
+                </div>
+                {% if trailer_link %}
+                    <div class="embed-responsive embed-responsive-16by9 mt-2">
+                        <iframe width="800px" height="640px" src="{{ trailer_link[0] }}" title="{{ title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                        </iframe>
+
+                    </div>
+                {% else %}
+                    <p>No trailer available.</p>
+                {% endif %}
             </div>
         </div>
-
-        <br>
 
         <h2 class="my-5 text-center">Recommendations</h2>
         <div class="container">
