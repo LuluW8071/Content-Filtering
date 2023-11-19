@@ -21,18 +21,41 @@
 
 <body>
     <section class="portfolio scroll-down-animation">
-        <div class="container my-1">
-            <h3>HOME</h3>
-            <div class="row shuffle-wrapper portfolio-gallery mt-3">
-                {% for movie in movies %}
+        <div class="container my-5">
+            <div class="row">
+                <div class="col-md-4 pl-md-0 pr-md-0 selected-book">
+                    <img src="{{ posters[0] }}" alt="{{ title }}" class="img-fluid w-100 d-block movie-poster">
+
+                </div>
+                <div class="col-md-8">
+                    <h1 class="text-center my-3">{{ title }}</h1>
+                    <hr>
+                    <br>
+                    <div class="details ml-5">
+                        <p><b>Movie id:</b> {{ id }}</p>
+                        <p><b></b> {{ overview}}</p>
+                        <p><b>Genres:</b> {{ genres }}</p>
+                        <p><b>Director:</b> {{ crew }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <h2 class="my-5 text-center">Recommendations</h2>
+        <div class="container">
+            <div class="row shuffle-wrapper portfolio-gallery mt-0">
+                {% for movie in recommended_movies %}
                 <div class="col-lg-3 col-3 mb-4 shuffle-item" data-groups="[&quot;branding&quot;]">
                     <div class="position-relative inner-box">
                         <div class="image position-relative ">
-                            <img src="{{ posters[loop.index0] }}" alt="{{ movie.title }}" class="img-fluid w-100 d-block book-image">
+                            <img src="col-md-4 pl-md-0 pr-md-0 selected-book">
+                            <img src="https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg" alt="{{ movie['title'] }}" class="img-fluid w-100 d-block book-image">
                             <div class="overlay-box">
                                 <div class="overlay-inner">
-                                    <a class="overlay-content" href="{{ url_for('movie', id=movie.id|urlencode, title=movie.title|urlencode, genres=movie.genres|urlencode, crew=movie.crew|urlencode) }}">
-                                        <h5 class ="mb-0">{{ movie.title }}</h5>
+                                    <a class="overlay-content" href="#">
+                                        <h5 class="mb-0">{{ movie['title'] }}</h5>
                                     </a>
                                 </div>
                             </div>
@@ -43,26 +66,6 @@
             </div>
         </div>
     </section>
-    <!-- Portfolio End -->
-
-    <!-- Pagination -->
-    <nav aria-label="Pagination">
-        <ul class="pagination justify-content-center pt-0 py-5 mt-5">
-            <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
-                <a class="page-link" href="{{prev}}" tabindex="-1"><i class="fa fa-chevron-left"></i></a>
-            </li>
-
-            {% for i in range(current_page-1, current_page+2) if i > 0 and i <= num_pages and i <=11 %} 
-            <li class="page-item {% if current_page == i %}active{% endif %}">
-                <a class="page-link" href="/?page={{ i }}">{{ i }}</a>
-            </li>
-                {% endfor %}
-
-                <li class="page-item {% if current_page == num_pages %}disabled{% endif %}">
-                    <a class="page-link" href="{{next}}"><i class="fa fa-chevron-right"></i></a>
-                </li>
-        </ul>
-    </nav>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
