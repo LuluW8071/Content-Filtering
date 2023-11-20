@@ -7,14 +7,15 @@ import re
 import pandas as pd
 import numpy as np
 
+from recommend import recommend
+
 from algoliasearch.search_client import SearchClient
-from api import fetch_poster, fetch_overview, fetch_trailers
+from api import fetch_poster, fetch_overview, fetch_trailers, fetch_recommend_posters
 from api import ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
 
 # ------Load dataset files--------
-movies_df = pickle.load(open('model/movies.pkl', 'rb'))
+
 popular_df = pickle.load(open('model/movies_dataset.pkl', 'rb'))
-similarity = pickle.load(open('model/similarity.pkl', 'rb'))
 
 app = Flask(__name__)
 
@@ -27,8 +28,6 @@ app.config['UPLOAD_FOLDER'] = 'static'
 
 # --------Templates----------
 # Setting up home page
-
-
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
@@ -78,8 +77,6 @@ client = SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 index = client.init_index(ALGOLIA_INDEX_NAME)
 
 # Search function
-
-
 @app.route('/search')
 def search():
     query = request.args.get('query')
@@ -112,6 +109,7 @@ def search():
                                posters=posters)
 
 
+# Setting Movie Page
 @app.route('/movie', methods=['GET'])
 def movie():
     id = request.args.get('id')
@@ -132,6 +130,10 @@ def movie():
     trailer_link = fetch_trailers([id])
     # print(trailer_link)
 
+    # Recommended movies and fetch poster URLs for the movie IDs that were recommended
+    recommended_movies = recommend(title)
+    recommended_posters = fetch_recommend_posters(recommended_movies)
+
     return render_template('movie.html', id=id,
                            title=title,
                            overview=overview[0] if overview else None,
@@ -144,7 +146,8 @@ def movie():
                            release_year=release_year,
                            posters=posters,
                            trailer_link=trailer_link,
-                           # recommended_movies=recommended_movies
+                           recommended_movies=recommended_movies,
+                           recommended_posters=recommended_posters
                            )
 
 
@@ -163,15 +166,3 @@ if __name__ == '__main__':
 
  # Testing
  # Recommendation through movies_df and similarity
- # movie_index = next((i for i, title in enumerate(movies_df['title']) if title == movie_title), None)
- # distance = similarity[movie_index]
- # movies_list = sorted(list(enumerate(distance)),
- #                      reverse=True, key=lambda x: x[1])[1:5]
-
- # recommended_movies = [{'title': movies_df.iloc[i[0]]['title'],
- #                        'id': movies_df.iloc[i[0]]['id']} for i in movies_list]
-
- # for i in movies_list:
- #     print(new_df.iloc[i[0]].title)
-
- # print(recommended_movies)
