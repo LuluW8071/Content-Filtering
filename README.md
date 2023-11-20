@@ -1,5 +1,7 @@
 ### Movie Recommendation
-![Demo GIF](static/demo.gif)
+<div style="text-align: center;">
+  <img src="static/demo.gif" alt="Demo GIF">
+</div>
 <hr>
 
 #### Dependencies
