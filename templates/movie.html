@@ -56,12 +56,14 @@
         <h2 class="my-5 text-center">Recommendations</h2>
         <div class="container">
             <div class="row shuffle-wrapper portfolio-gallery mt-0">
-                {% for movie in recommended_movies %}
+            {% if recommended_movies %}
+                {% for index in range(recommended_movies|length) %}
+                {% set movie = recommended_movies[index] %}
+                {% set poster = recommended_posters[index] %}
                 <div class="col-lg-3 col-3 mb-4 shuffle-item" data-groups="[&quot;branding&quot;]">
                     <div class="position-relative inner-box">
                         <div class="image position-relative ">
-                            <img src="col-md-4 pl-md-0 pr-md-0 selected-book">
-                            <img src="https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg" alt="{{ movie['title'] }}" class="img-fluid w-100 d-block book-image">
+                            <img src="{{ poster }}" alt="{{ movie['title'] }}" class="img-fluid w-100 d-block book-image">
                             <div class="overlay-box">
                                 <div class="overlay-inner">
                                     <a class="overlay-content" href="#">
@@ -73,6 +75,9 @@
                     </div>
                 </div>
                 {% endfor %}
+            {% else %}
+                <p>No recommendations available.</p>
+            {% endif %}
             </div>
         </div>
     </section>
