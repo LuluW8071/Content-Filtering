@@ -34,7 +34,6 @@ def index():
     per_page = 12
     movies_data = popular_df[['id',
                               'title',
-                              'overview',
                               'genres',
                               'popularity',
                               'crew',

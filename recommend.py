@@ -1,9 +1,9 @@
 import pickle
 
 # ------Load dataset files--------
+dataset = pickle.load(open('model/movies_dataset.pkl', 'rb'))
 movies_df = pickle.load(open('model/movies.pkl', 'rb'))
 similarity = pickle.load(open('model/similarity.pkl', 'rb'))
-
 
 def recommend(movie_title):
     movie_index = next((i for i, title in enumerate(
@@ -19,7 +19,11 @@ def recommend(movie_title):
         for i in movies_list:
             movie_data = {
                 'title': movies_df.iloc[i[0]]['title'],
-                'id': movies_df.iloc[i[0]]['id']
+                'id': movies_df.iloc[i[0]]['id'],
+                'genres': dataset.iloc[i[0]]['genres'],
+                'crew': dataset.iloc[i[0]]['crew'],
+                'runtime': dataset.iloc[i[0]]['runtime'],
+                'release_year': dataset.iloc[i[0]]['release_year']
             }
             recommended_movies.append(movie_data)
             
